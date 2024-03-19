@@ -153,7 +153,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--alg", type=str, default="ITL (directed) [ours]")
+    parser.add_argument("--alg", type=str, default="MM-ITL [ours]")
     parser.add_argument("--kernel", type=str, default="Gaussian")
     parser.add_argument("--lengthscale", type=float, default=1.0)
     parser.add_argument(

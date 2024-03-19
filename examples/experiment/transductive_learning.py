@@ -15,6 +15,7 @@ from lib.algorithms.baselines import UncertaintySampling, UniformSampling
 from lib.algorithms.ctl import CTL
 from lib.algorithms.itl import ITL
 from lib.algorithms.line_bo import CoordinateLineBO, directed_alg_constructor
+from lib.algorithms.mm_itl import MMITL
 from lib.algorithms.tru_var import TruVar
 from lib.algorithms.vtl import VTL
 from lib.model.continuous import ContinuousModel
@@ -41,6 +42,7 @@ class DiscreteTransductiveLearningExperiment(DiscreteExperiment):
             "Uncertainty Sampling (constrained)": "base",
             "ITL (undirected) [ours]": "base",
             "ITL (directed) [ours]": "base",
+            "MM-ITL [ours]": "base",
             "CTL [ours]": "base",
             "VTL [ours]": "base",
             "TruVar": "TruVarModel",
@@ -74,6 +76,12 @@ class DiscreteTransductiveLearningExperiment(DiscreteExperiment):
             )
         elif key == "ITL (directed) [ours]":
             alg = ITL(
+                model=model,
+                roi_constructor=roi_constructor,
+                sample_region=self.sample_region,
+            )
+        elif key == "MM-ITL [ours]":
+            alg = MMITL(
                 model=model,
                 roi_constructor=roi_constructor,
                 sample_region=self.sample_region,
