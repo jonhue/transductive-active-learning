@@ -3,7 +3,7 @@ jax==0.4.14
 jaxlib==0.4.14
 jaxtyping==0.2.22
 chex==0.1.82
-optax==0.1.7
+optax==0.2.1
 tqdm~=4.66
 matplotlib~=3.8
 pdoc~=14.4
