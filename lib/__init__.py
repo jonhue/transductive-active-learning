@@ -6,7 +6,7 @@ There are two main components:
 1. `lib.algorithms` - The acquisition functions.
 
 Additionally, `lib.function` wraps the unknown function and can be used to model the black-box functions of synthetic experiments.
-`lib.prior` can be used to obtain a prior distribution by sampling some initial points.
+`lib.gp` can be used to obtain a prior distribution by sampling some initial points.
 
 The following pseudocode illustrates how model and algorithm can be used for black-box optimization.
 
