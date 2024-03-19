@@ -35,9 +35,9 @@ def bayesian_optimization_metrics(
             model.stddevs[:, model.potential_maximizers],
             initial=0,
         ),
-        surr_instantaneous_regret=model.max_u - model.l[0, x_idx]
-        if not jnp.isnan(x_idx)
-        else jnp.nan,
+        surr_instantaneous_regret=(
+            model.max_u - model.l[0, x_idx] if not jnp.isnan(x_idx) else jnp.nan
+        ),
         surr_simple_regret=model.max_u - model.max_l,
     )
 
