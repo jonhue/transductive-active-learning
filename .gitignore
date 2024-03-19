@@ -1,0 +1,15 @@
+.vscode
+
+__pycache__
+.DS_Store
+
+venv
+
+main.*
+!main.tex
+
+*.pkl
+*.out
+
+
+**/launcher.py

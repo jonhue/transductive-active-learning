@@ -1,0 +1,11 @@
+{
+  "include": [
+    // "examples",
+    "lib",
+    "tests"
+  ],
+  "exclude": [
+    "lib/plotting.py"
+  ],
+  "typeCheckingMode": "basic",
+}
