@@ -3,19 +3,19 @@ from typing import Callable
 from jax import vmap
 import jax.numpy as jnp
 import jax.random as jr
-from jaxtyping import Array, Bool, Float, Int
+from jaxtyping import Array, Bool, Float
 from matplotlib import gridspec
 import matplotlib.pyplot as plt
 from lib.function import Function
 from lib.noise import Noise, NoiseOracle
-from lib.typing import ScalarFloat, ScalarInt
-from lib.utils import Dataset, estimate_L, set_to_idx
+from lib.typing import KeyArray, ScalarFloat
+from lib.utils import Dataset, estimate_L
 
 
 class SyntheticFunction(Function):
     def __init__(
         self,
-        key: jr.KeyArray,
+        key: KeyArray,
         q: int,
         f: Callable[[Float[Array, "d"]], Float[Array, "q"]],
         noise_rate: Noise,
@@ -37,7 +37,7 @@ class SyntheticFunction(Function):
         self._noise_rate = noise_rate
         self._noise_oracle = noise_oracle
 
-    def acquire_key(self) -> jr.KeyArray:
+    def acquire_key(self) -> KeyArray:
         self._key, key = jr.split(self._key)
         return key
 

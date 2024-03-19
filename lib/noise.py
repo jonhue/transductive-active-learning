@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Callable, List, Sequence
-from jax import vmap
 import jax.numpy as jnp
 import jax.random as jr
 from jaxtyping import Array, Float
 
+from lib.typing import KeyArray
 
-NoiseOracle = Callable[[jr.KeyArray, Sequence[int]], Array]
+
+NoiseOracle = Callable[[KeyArray, Sequence[int]], Array]
 """Function returning (unscaled) noise with a provided shape."""
 
 gaussian_noise: NoiseOracle = lambda key, shape: jr.normal(

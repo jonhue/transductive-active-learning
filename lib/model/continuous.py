@@ -2,7 +2,6 @@ from functools import partial
 from typing import Callable, List
 from jax import jit
 import jax.numpy as jnp
-import jax.random as jr
 from jaxtyping import Array, Float
 from lib.gp.gaussian_distribution import GaussianDistribution
 from lib.gp.kernels import Kernel
@@ -10,6 +9,7 @@ from lib.gp.means import Mean, ZeroMean
 from lib.model import Model
 from lib.model.marginal import MarginalModel
 from lib.noise import Noise
+from lib.typing import KeyArray
 
 
 class ContinuousModel(Model):
@@ -29,7 +29,7 @@ class ContinuousModel(Model):
 
     def __init__(
         self,
-        key: jr.KeyArray,
+        key: KeyArray,
         d: int,
         prior_kernels: List[Kernel],
         beta: Float[Array, "q"] | Callable[[int], Float[Array, "q"]],

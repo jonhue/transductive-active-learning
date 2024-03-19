@@ -7,3 +7,5 @@ ScalarIntArray = Int[Array, ""]
 ScalarInt = Union[int, ScalarIntArray]
 ScalarFloatArray = Float[Array, ""]
 ScalarFloat = Union[float, ScalarFloatArray]
+
+KeyArray = Array

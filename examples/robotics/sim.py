@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from jax import jit, vmap
 from trajax import optimizers
 
-from lib.typing import ScalarFloat, ScalarInt
+from lib.typing import KeyArray, ScalarFloat, ScalarInt
 from lib.utils import std_error
 from lib.plotting import store_and_show_fig
 
@@ -219,7 +219,7 @@ def critical_damping(proportional_params: Float[Array, "u_dim"]) -> ModelFeedBac
 
 
 def sample_disturbance_params(
-    key: jr.KeyArray, disturbance_scale: ScalarFloat
+    key: KeyArray, disturbance_scale: ScalarFloat
 ) -> ModelFeedBackParams:
     proportional_params = disturbance_scale * jnp.square(jr.normal(key, shape=(4,)))
     disturbance_params = critical_damping(proportional_params)

@@ -4,13 +4,14 @@ import jax.random as jr
 from lib.function import Function
 from lib.gp.gaussian_distribution import GaussianDistribution
 from lib.gp.kernels import Kernel
-from lib.gp.means import Mean, ZeroMean
+from lib.gp.means import Mean
 from lib.noise import Noise
+from lib.typing import KeyArray
 from lib.utils import get_indices
 
 
 def initial_observations(
-    key: jr.KeyArray,
+    key: KeyArray,
     f: Function,
     n_samples: int,
     region: Float[Array, "n d"],
