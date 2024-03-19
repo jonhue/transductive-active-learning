@@ -185,9 +185,11 @@ class Experiment:
 
     def _prepare_priors(self, key: str) -> Model:
         X, y = initial_observations(
-            key=self.prior_sample_key
-            if self.prior_sample_key is not None
-            else self.acquire_key(),
+            key=(
+                self.prior_sample_key
+                if self.prior_sample_key is not None
+                else self.acquire_key()
+            ),
             f=self.f,
             n_samples=self.prior_n_samples,
             region=self.prior_sample_region,
