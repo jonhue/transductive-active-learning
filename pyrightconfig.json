@@ -1,6 +1,6 @@
 {
   "include": [
-    // "examples",
+    "examples",
     "lib",
     "tests"
   ],
