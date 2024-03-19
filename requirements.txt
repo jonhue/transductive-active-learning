@@ -2,7 +2,7 @@ pandas~=2.2
 jax==0.4.14
 jaxlib==0.4.14
 jaxtyping==0.2.22
-chex==0.1.82
+chex==0.1.86
 optax==0.2.1
 tqdm~=4.66
 matplotlib~=3.8
