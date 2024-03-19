@@ -18,6 +18,8 @@ jobs:
       run: black . --check
     - name: Run pyright
       uses: jakebailey/pyright-action@v2
+      with:
+        version: 1.1.352
     - name: Run pytest
       run: |
         export PYTHONPATH=$(pwd)
