@@ -5,7 +5,7 @@ from jaxtyping import Array, Float
 import jax.random as jr
 
 from lib.gp import means
-from lib.typing import ScalarFloat
+from lib.typing import KeyArray, ScalarFloat
 from lib.utils import estimate_L
 
 
@@ -25,7 +25,7 @@ class Kernel(ABC):
         return self.cross_covariance(X, X)
 
     def estimate_L(
-        self, key: jr.KeyArray, n_samples: int, X: Float[Array, "n d"]
+        self, key: KeyArray, n_samples: int, X: Float[Array, "n d"]
     ) -> ScalarFloat:
         subkey1, subkey2 = jr.split(key)
         mean = means.ZeroMean()

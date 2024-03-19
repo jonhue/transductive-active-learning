@@ -13,7 +13,7 @@ from lib.function.synthetic import SyntheticFunction
 from lib.gp.gaussian_distribution import GaussianDistribution
 from lib.model import Model
 from lib.noise import Noise
-from lib.typing import ScalarBool, ScalarFloat, ScalarFloatArray, ScalarInt
+from lib.typing import KeyArray, ScalarBool, ScalarFloat, ScalarFloatArray, ScalarInt
 from lib.utils import Dataset, estimate_L, get_indices, is_subset_of, set_to_idx
 from lib.plotting import plot_region
 
@@ -32,7 +32,7 @@ class MarginalModel(Model):
 
     def __init__(
         self,
-        key: jr.KeyArray,
+        key: KeyArray,
         domain: Float[Array, "n d"],
         distrs: List[GaussianDistribution],
         beta: Float[Array, "q"] | Callable[[int], Float[Array, "q"]],
@@ -223,10 +223,11 @@ class MarginalModel(Model):
         """Set of points which are optimistically safe and potentially better than the worst-case (pessimistically safe) maximum."""
         return self.optimistic_safe_set & (self.u[0] >= self.max_l)
 
-    def sample(self, k: int, keys: jr.KeyArray | None = None) -> Float[Array, "q k n"]:
+    def sample(self, k: int, keys: KeyArray | None = None) -> Float[Array, "q k n"]:
         """Sample $k$ independent functions from the statistical model."""
         if keys is None:
-            self._key, *keys = jr.split(self._key, num=1 + self.q)
+            self._key, *keys = jr.split(self._key, num=1 + self.q)  # type: ignore
+            assert keys is not None
         return jnp.array(
             [
                 self.distr(i).sample(key=keys[i], sample_shape=(k,))

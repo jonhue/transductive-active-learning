@@ -33,7 +33,7 @@ from lib.algorithms.safe_opt.model import (
     SafeOptContinuousModel,
     SafeOptModel,
 )
-from lib.typing import ScalarBool, ScalarFloat
+from lib.typing import KeyArray, ScalarBool, ScalarFloat
 from lib.utils import Dataset
 
 
@@ -118,7 +118,7 @@ class ExperimentData(dict):
 class Experiment:
     def __init__(
         self,
-        key: jr.KeyArray,
+        key: KeyArray,
         name: str,
         d: int,
         f: Function,
@@ -133,7 +133,7 @@ class Experiment:
         prior_kernels: List[Kernel],
         prior_n_samples: int,
         prior_sample_region: Float[Array, "n d"],
-        prior_sample_key: jr.KeyArray | None = None,
+        prior_sample_key: KeyArray | None = None,
         safe_opt_config: Dict[str, Any] | None = None,
         tru_var_config: Dict[str, Any] | None = None,
         track_figs: bool = False,
@@ -160,7 +160,7 @@ class Experiment:
         self.track_figs = track_figs
         self.check_calibration = check_calibration
 
-    def acquire_key(self) -> jr.KeyArray:
+    def acquire_key(self) -> KeyArray:
         self._key, key = jr.split(self._key)
         return key
 

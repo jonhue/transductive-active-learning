@@ -19,12 +19,11 @@ from abc import ABC, abstractmethod
 from typing import Callable, Generic, NewType, Tuple, TypeVar
 from jax import vmap
 import jax.numpy as jnp
-import jax.random as jr
 from jaxtyping import Array, Bool, Float
 from lib.function import Function
 from lib.model import Model
 from lib.model.marginal import MarginalModel
-from lib.typing import ScalarInt
+from lib.typing import KeyArray, ScalarInt
 from lib.utils import get_mask
 
 
@@ -44,7 +43,7 @@ class GreedyAlgorithm(Algorithm):
     def __init__(self, model: Model):
         self.model = model
 
-    def acquire_key(self) -> jr.KeyArray:
+    def acquire_key(self) -> KeyArray:
         return self.model.acquire_key()
 
 

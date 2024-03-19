@@ -7,7 +7,7 @@ import jax.numpy as jnp
 import jax.random as jr
 from lib.gp.kernels import Kernel
 from lib.gp.means import Mean
-from lib.typing import ScalarFloat
+from lib.typing import KeyArray, ScalarFloat
 from lib.utils import noise_covariance_matrix, solve_linear_system
 
 DEFAULT_JITTER = 1e-5
@@ -87,7 +87,7 @@ class GaussianDistribution:
         """Vectors of standard deviations of all one-dimensional marginals."""
         return jnp.sqrt(self.variance)
 
-    def sample(self, key: jr.KeyArray, sample_shape: tuple) -> Float[Array, "n"]:
+    def sample(self, key: KeyArray, sample_shape: tuple) -> Float[Array, "n"]:
         """Sample independent functions from the Gaussian."""
         return jr.multivariate_normal(
             key=key,

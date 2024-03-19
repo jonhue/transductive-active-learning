@@ -4,6 +4,7 @@ from jaxtyping import Array, Bool, Float
 import jax.numpy as jnp
 import jax.random as jr
 from lib.noise import Noise
+from lib.typing import KeyArray
 
 
 class Model(ABC):
@@ -24,7 +25,7 @@ class Model(ABC):
 
     def __init__(
         self,
-        key: jr.KeyArray,
+        key: KeyArray,
         q: int,
         beta: Float[Array, "q"] | Callable[[int], Float[Array, "q"]],
         noise_rate: Noise,
@@ -43,7 +44,7 @@ class Model(ABC):
         self.beta = (lambda t: beta) if not callable(beta) else beta
         self.noise_rate = noise_rate
 
-    def acquire_key(self) -> jr.KeyArray:
+    def acquire_key(self) -> KeyArray:
         self._key, key = jr.split(self._key)
         return key
 
