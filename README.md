@@ -1,7 +1,5 @@
 # Transductive Active Learning with Application to Safe Bayesian Optimization
 
-This repository accompanies the Safe BO application from the paper ["Information-based Transductive Active Learning"](https://arxiv.org/abs/2402.15898).
-
 ## Getting started
 
 ### Installation
