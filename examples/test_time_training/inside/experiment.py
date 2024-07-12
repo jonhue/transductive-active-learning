@@ -32,9 +32,7 @@ PRIOR_SAMPLE_REGION = DOMAIN
 NOISE_STD = 1
 ENTROPY_JITTER = 9e-17
 
-ROI_DESCRIPTION = ROIDescription(
-    jnp.array([[[-0.05, 0.05], [-0.05, 0.05]]])
-)
+ROI_DESCRIPTION = ROIDescription(jnp.array([[[-0.05, 0.05], [-0.05, 0.05]]]))
 
 SAMPLE_REGION_MASK = (
     (DOMAIN[:, 0] >= -3)
@@ -48,7 +46,12 @@ T = 500
 
 
 def experiment(
-    seed: int, alg: str | None, noise_std: float, kernel_name: str, lengthscale: float, name: str
+    seed: int,
+    alg: str | None,
+    noise_std: float,
+    kernel_name: str,
+    lengthscale: float,
+    name: str,
 ):
     wandb.init(
         name="test_time_training/inside",
@@ -69,7 +72,16 @@ def experiment(
 
     jax_has_gpu()
     print(
-        "SEED:", seed, "ALG:", alg, "NOISE_STD:", noise_std, "KERNEL:", kernel_name, "LENGTHSCALE:", lengthscale
+        "SEED:",
+        seed,
+        "ALG:",
+        alg,
+        "NOISE_STD:",
+        noise_std,
+        "KERNEL:",
+        kernel_name,
+        "LENGTHSCALE:",
+        lengthscale,
     )
 
     if kernel_name == "Gaussian":
@@ -158,8 +170,6 @@ if __name__ == "__main__":
     parser.add_argument("--noise-std", type=float, default=NOISE_STD)
     parser.add_argument("--kernel", type=str, default="Gaussian")
     parser.add_argument("--lengthscale", type=float, default=1.0)
-    parser.add_argument(
-        "--name", type=str, default="test_time_training/inside"
-    )
+    parser.add_argument("--name", type=str, default="test_time_training/inside")
     args = parser.parse_args()
     main(args)
