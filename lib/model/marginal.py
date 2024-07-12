@@ -49,6 +49,7 @@ class MarginalModel(Model):
         self._t = t
         self._l = self._recompute_l()
         self._u = self._recompute_u()
+        self._X = jnp.array([]).reshape(0, domain.shape[1])
 
     @property
     def n(self) -> int:
@@ -366,6 +367,7 @@ class MarginalModel(Model):
         self._l = jnp.maximum(self._l, self._recompute_l())
         self._u = jnp.minimum(self._u, self._recompute_u())
         self._t += m
+        self._X = jnp.concatenate([self._X, X], axis=0)
 
     def estimate_L(self, sample_frac=0.01, n_samples=100) -> Float[Array, "q"]:
         r"""Estimate Lipschitz constants based on `n_samples` from statistical model of $\mathbf{f}$."""

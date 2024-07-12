@@ -1,9 +1,9 @@
 import argparse
 import time
 import jax.numpy as jnp
+import jax.random as jr
 from jaxtyping import Array, Float
 from jax._src.config import config
-import jax.random as jr
 import wandb
 
 from examples.jax_test import jax_has_gpu
@@ -29,40 +29,59 @@ DENSITY = (HIGH - LOW) / N
 DOMAIN = jnp.mgrid[LOW:HIGH:DENSITY, LOW:HIGH:DENSITY].reshape(2, -1).T
 
 PRIOR_SAMPLE_REGION = DOMAIN
-LENGTHSCALE = 1
-NOISE_STD = 1e-1
+NOISE_STD = 1
+ENTROPY_JITTER = 9e-17
 
-ROI_DESCRIPTION = ROIDescription(jnp.array([[[-1, 1], [-1, 1]]]))
+ROI_DESCRIPTION = ROIDescription(
+    jnp.array([[[-1.1, -1], [-1.1, -1]]])
+)
+
+SAMPLE_REGION_MASK = (
+    (DOMAIN[:, 0] >= -1)
+    & (DOMAIN[:, 0] <= 3)
+    & (DOMAIN[:, 1] >= -1)
+    & (DOMAIN[:, 1] <= 3)
+)
+SAMPLE_REGION = DOMAIN[SAMPLE_REGION_MASK]
 
 T = 500
 
 
-def experiment(seed: int, alg: str | None, name: str):
+def experiment(
+    seed: int, alg: str | None, noise_std: float, kernel_name: str, lengthscale: float, name: str
+):
     wandb.init(
-        name="no_constraints/learning/2d_rbf",
+        name="test_time_training/outside",
         dir="/cluster/scratch/jhuebotter/wandb/idl",
         project="IDL",
         config={
             "T": T,
-            "N": N,
-            "LOW": LOW,
-            "HIGH": HIGH,
             "beta": BETA,
-            "lengthscale": LENGTHSCALE,
-            "noise_std": NOISE_STD,
+            "lengthscale": lengthscale,
+            "noise_std": noise_std,
             "seed": seed,
             "alg": alg,
+            "kernel": kernel_name,
+            "jitter": ENTROPY_JITTER,
         },
         # mode="offline"
     )
 
     jax_has_gpu()
-    print("SEED:", seed, "ALG:", alg)
+    print(
+        "SEED:", seed, "ALG:", alg, "NOISE_STD:", noise_std, "KERNEL:", kernel_name, "LENGTHSCALE:", lengthscale
+    )
+
+    if kernel_name == "Gaussian":
+        kernel = kernels.stationary.Gaussian(lengthscale=lengthscale)
+    elif kernel_name == "Laplace":
+        kernel = kernels.stationary.Laplace(lengthscale=lengthscale)
+    else:
+        raise NotImplementedError
 
     key = jr.PRNGKey(seed)
     key, subkey = jr.split(key)
     mean = means.ZeroMean()
-    kernel = kernels.stationary.Gaussian(lengthscale=LENGTHSCALE)
     vals = jr.multivariate_normal(
         subkey, mean.vector(DOMAIN), kernel.covariance(DOMAIN), method="svd"
     )
@@ -70,7 +89,7 @@ def experiment(seed: int, alg: str | None, name: str):
     def f_oracle(x: Float[Array, "d"]) -> Float[Array, "1"]:
         return vals[get_indices(DOMAIN, x.reshape(1, -1))].reshape(-1)
 
-    noise_rate = HomoscedasticNoise(q=1, noise_rates=jnp.array([NOISE_STD]))
+    noise_rate = HomoscedasticNoise(q=1, noise_rates=jnp.array([noise_std]))
     key, subkey = jr.split(key)
     f = SyntheticFunction(
         key=subkey,
@@ -84,18 +103,26 @@ def experiment(seed: int, alg: str | None, name: str):
 
     roi_mask = compute_roi_mask(DOMAIN, ROI_DESCRIPTION)
     key, subkey = jr.split(key)
+    key, jitter_key = jr.split(key)
     exp = DiscreteTransductiveLearningExperiment(
         domain=DOMAIN,
         roi_description=ROI_DESCRIPTION,
+        sample_region=SAMPLE_REGION,
         key=subkey,
         name=name,
         d=2,
         f=f,
         noise_rate=noise_rate,
         use_objective_as_constraint=False,
-        metrics_fn=transductive_learning_metrics_generator(roi_mask),
+        metrics_fn=transductive_learning_metrics_generator(
+            roi_mask, entropy_jitter={"amount": ENTROPY_JITTER, "key": jitter_key}
+        ),
         plot_fn=lambda model, D, f, title: model.plot_2d(
-            X=D.X, f=f, roi=roi_mask, title=title
+            X=D.X,
+            f=f,
+            roi=roi_mask,
+            sample_region=SAMPLE_REGION_MASK,
+            title=title,
         ),
         beta=BETA,
         T=T,
@@ -113,15 +140,26 @@ def experiment(seed: int, alg: str | None, name: str):
 
 def main(args):
     t_start = time.process_time()
-    assert args.alg is not None
-    experiment(seed=args.seed, alg=args.alg, name=args.name)
+    experiment(
+        seed=args.seed,
+        alg=args.alg,
+        noise_std=args.noise_std,
+        kernel_name=args.kernel,
+        lengthscale=args.lengthscale,
+        name=args.name,
+    )
     print("Total time taken:", time.process_time() - t_start, "seconds")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--alg", type=str, default="ITL (directed) [ours]")
-    parser.add_argument("--name", type=str, default="no_constraints/learning/2d_rbf")
+    parser.add_argument("--alg", type=str, default="MM-ITL [ours]")
+    parser.add_argument("--noise-std", type=float, default=NOISE_STD)
+    parser.add_argument("--kernel", type=str, default="Gaussian")
+    parser.add_argument("--lengthscale", type=float, default=1.0)
+    parser.add_argument(
+        "--name", type=str, default="test_time_training/outside"
+    )
     args = parser.parse_args()
     main(args)
