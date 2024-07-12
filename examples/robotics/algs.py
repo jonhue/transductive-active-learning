@@ -29,6 +29,7 @@ from lib.algorithms.line_bo import (
     alg_constructor,
     directed_alg_constructor,
 )
+from lib.algorithms.mvtl import MVTL
 from lib.algorithms.safe_opt import SafeOpt
 from lib.algorithms.vtl import VTL
 from lib.model.continuous import ContinuousModel
@@ -67,6 +68,7 @@ class ContinuousBOExperiment(ContinuousExperiment):
             "MM-ITL-PM [ours]": "base",
             "CTL-PM [ours]": "base",
             "VTL-PM [ours]": "base",
+            "MVTL-PM [ours]": "base",
             "SafeOpt": "SafeOptModel",
             "Oracle SafeOpt": "OracleSafeOptModel",
             "Heuristic SafeOpt": "HeuristicSafeOptModel",
@@ -104,6 +106,8 @@ class ContinuousBOExperiment(ContinuousExperiment):
             alg_constr = directed_alg_constructor(CTL, pm_roi_constructor)
         elif key == "VTL-PM [ours]":
             alg_constr = directed_alg_constructor(VTL, pm_roi_constructor)
+        elif key == "MVTL-PM [ours]":
+            alg_constr = directed_alg_constructor(MVTL, pm_roi_constructor)
         elif key == "SafeOpt":
             alg_constr = alg_constructor(SafeOpt)
         elif key == "Oracle SafeOpt":

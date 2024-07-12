@@ -24,6 +24,7 @@ from lib.algorithms.goose.model import GoOSEModel
 from lib.algorithms.itl import ITL
 from lib.algorithms.mm_itl import MMITL
 from lib.algorithms.ise import ISE, ISEBO
+from lib.algorithms.mvtl import MVTL
 from lib.algorithms.safe_opt import SafeOpt
 from lib.algorithms.safe_opt.model import HeuristicSafeOptModel, SafeOptModel
 from lib.algorithms.vtl import VTL
@@ -49,6 +50,7 @@ class DiscreteBOExperiment(DiscreteExperiment):
             "CTL-PM [ours]": "base",
             "VTL-PM [ours]": "base",
             "VTL-PE [ours]": "base",
+            "MVTL-PM [ours]": "base",
             "SafeOpt": "SafeOptModel",
             "Oracle SafeOpt": "OracleSafeOptModel",
             "Heuristic SafeOpt": "HeuristicSafeOptModel",
@@ -90,6 +92,8 @@ class DiscreteBOExperiment(DiscreteExperiment):
             alg = VTL(model=model, roi_constructor=pm_roi_constructor)
         elif key == "VTL-PE [ours]":
             alg = VTL(model=model, roi_constructor=pe_roi_constructor)
+        elif key == "MVTL-PM [ours]":
+            alg = MVTL(model=model, roi_constructor=pm_roi_constructor)
         elif key == "SafeOpt" and isinstance(model, SafeOptModel):
             alg = SafeOpt(model=model)
         elif key == "Oracle SafeOpt" and isinstance(model, SafeOptModel):
