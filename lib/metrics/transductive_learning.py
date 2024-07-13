@@ -4,13 +4,15 @@ import jax.random as jr
 from jaxtyping import Array, Bool, Float
 from lib.function import Function
 from lib.model.marginal import MarginalModel
-from lib.typing import ScalarFloat
+from lib.typing import ScalarFloat, ScalarInt
 
 
 class TransductiveLearningMetrics(TypedDict):
     entropy_in_roi: ScalarFloat
     max_stddev_in_roi: ScalarFloat
     avg_stddev_in_roi: ScalarFloat
+    num_unique_samples: int
+    most_single_samples: ScalarInt
 
 
 def transductive_learning_metrics_generator(
@@ -24,10 +26,13 @@ def transductive_learning_metrics_generator(
             jitter = entropy_jitter["amount"] * jr.uniform(key)
         else:
             jitter = 0.0
+        unique_rows, counts = jnp.unique(model._X, axis=0, return_counts=True)
         return TransductiveLearningMetrics(
             entropy_in_roi=model.masked_entropy(roi_mask, jitter=jitter),
             max_stddev_in_roi=jnp.max(model.stddevs[:, roi_mask], initial=0),
             avg_stddev_in_roi=jnp.mean(model.stddevs[:, roi_mask]),
+            num_unique_samples=unique_rows.shape[0],
+            most_single_samples=jnp.max(counts, initial=0),
         )
 
     return transductive_learning_metrics
