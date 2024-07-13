@@ -32,13 +32,13 @@ PRIOR_SAMPLE_REGION = DOMAIN
 NOISE_STD = 1
 ENTROPY_JITTER = 9e-17
 
-ROI_DESCRIPTION = ROIDescription(jnp.array([[[-1.1, -1], [-1.1, -1]]]))
+ROI_DESCRIPTION = ROIDescription(jnp.array([[[-1.1, -1], [-0.05, 0.05]]]))
 
 SAMPLE_REGION_MASK = (
-    (DOMAIN[:, 0] >= -1)
+    (DOMAIN[:, 0] >= 0)
     & (DOMAIN[:, 0] <= 3)
-    & (DOMAIN[:, 1] >= -1)
-    & (DOMAIN[:, 1] <= 3)
+    # & (DOMAIN[:, 1] >= -1)
+    # & (DOMAIN[:, 1] <= 3)
 )
 SAMPLE_REGION = DOMAIN[SAMPLE_REGION_MASK]
 
@@ -54,7 +54,7 @@ def experiment(
     name: str,
 ):
     wandb.init(
-        name="test_time_training/outside",
+        name="test_time_training/outside-2",
         dir="/cluster/scratch/jhuebotter/wandb/idl",
         project="IDL",
         config={

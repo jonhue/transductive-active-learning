@@ -579,6 +579,13 @@ class MarginalModel(Model):
         ax = fig.add_subplot(gs[0])
 
         if roi is not None:
+            if jnp.sum(roi) == 1:
+                ax.scatter(
+                    self.domain[roi, 0],
+                    self.domain[roi, 1],
+                    marker="+",
+                    color="#74B3EB",
+                )
             handles = self._plot_roi_2d(ax, roi, sample_region, interpolation)
         else:
             handles = self._plot_safe_set_2d(ax, f, interpolation)
