@@ -2,6 +2,10 @@
 
 This repository accompanies the Safe BO application from the paper ["Transductive Active Learning: Theory and Applications"](https://arxiv.org/abs/2402.15898).
 
+<p align="center">
+<img width="400" alt="Screenshot 2024-08-29 at 18 42 17" src="https://github.com/user-attachments/assets/0d7746f6-0e0b-41a3-a320-07adae4afbf3">
+</p>
+
 The work was presented in an oral presentation at the ICML 2024 Workshop on Aligning Reinforcement Learning Experimentalists and Theorists. See the corresponding version of the paper [here](https://jonhue.github.io/assets/pdf/icml-2024-arlet.pdf).
 
 ## Getting started
