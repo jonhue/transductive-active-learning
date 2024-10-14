@@ -1,5 +1,5 @@
 pandas~=2.2
-jax==0.4.30
+jax==0.4.34
 jaxlib==0.4.30
 jaxtyping==0.2.34
 chex==0.1.87
