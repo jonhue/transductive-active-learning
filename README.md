@@ -1,6 +1,6 @@
 # Transductive Active Learning with Application to Safe Bayesian Optimization
 
-This repository accompanies the Safe BO application from the paper ["Transductive Active Learning: Theory and Applications"](https://arxiv.org/abs/2402.15898).
+This repository accompanies the Safe BO application from the NeurIPS '24 paper ["Transductive Active Learning: Theory and Applications"](https://arxiv.org/abs/2402.15898).
 
 <p align="center">
 <img width="400" alt="Screenshot 2024-08-29 at 18 42 17" src="https://github.com/user-attachments/assets/0d7746f6-0e0b-41a3-a320-07adae4afbf3">
